@@ -17,6 +17,8 @@ Follow the requirements below to have this app function
 in both portrait and landscape configurations.
 The Activity layout files for both Portrait and Landscape are already provided
 */
+private lateinit var buttonFragment: ButtonFragment
+private lateinit var dieFragment: DieFragment
 
 class MainActivity : AppCompatActivity(), ButtonFragment.ButtonInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,14 +29,36 @@ class MainActivity : AppCompatActivity(), ButtonFragment.ButtonInterface {
             - Show only Button Fragment if portrait
             - show both fragments if Landscape
           */
-    }
+        buttonFragment = ButtonFragment()
+        dieFragment = DieFragment()
 
-    /* TODO 2: switch fragments if portrait (no need to switch fragments if Landscape)
+        if (resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container1, buttonFragment)
+                .commit()
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container2, dieFragment)
+                .commit()
+        } else {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container2, buttonFragment)
+                .commit()
+        }
+
+        /* TODO 2: switch fragments if portrait (no need to switch fragments if Landscape)
         */
-    // Remember to place Fragment transactions on BackStack so then can be reversed
-    override fun buttonClicked() {
-
+        // Remember to place Fragment transactions on BackStack so then can be reversed
     }
 
+    override fun buttonClicked() {
+        if (resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container1, buttonFragment)
+                .addToBackStack(null)
+                .commit()
 
+
+        }
+    }
 }
